@@ -64,23 +64,22 @@ def backend(q):
             return
         packet = parse(str(l))
         store(packet, dictionary)
-        print(dictionary[packet.SA].x,dictionary[packet.SA].y)
-        print(dictionary[packet.DA].x,dictionary[packet.DA].y)
         currenttime = clock()
         if (currenttime - lasttime) > 0.003:
             dictionary = decay(dictionary, currenttime-lasttime)
             lasttime = currenttime
             graph = {key:value.__dict__ for key,value in dictionary.items()}
             q.put(graph)
+        sleep(100)
 
 if __name__ == '__main__':
    q = Queue(maxsize=3)
-   #back_p  = Process(target=backend, args=(q,))
-   #front_p = Process(target=frontend, args=(q,))
-   #back_p.start()
-   #front_p.start()
-   #back_p.join()
-   #front_p.join()
-   backend(q)
+   back_p  = Process(target=backend, args=(q,))
+   front_p = Process(target=frontend, args=(q,))
+   back_p.start()
+   front_p.start()
+   back_p.join()
+   front_p.join()
+   #backend(q)
 
     

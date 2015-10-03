@@ -1,4 +1,5 @@
 import random
+import math
 class parsed_line:
 	ptype = ''
 	SA = ''	
@@ -13,7 +14,7 @@ class MAC_node: #SA will be the name of the instance, DA the edge
 		self.weight = 0
 		self.x = 0
 		self.y = 0 
+		self.sign = ((random.randint(0,2))*2 -1) 
 		self.oui= ''
 		self.edges = {}
-		self.radius = 0.0  #Time changing radius
-		self.theta = random.random()* 2 * math.pi  #Static const
+		self.tan = math.tan(random.random()* 2 * math.pi)  #Static const
