@@ -1,5 +1,5 @@
 
-target_weight = 3000.0
+target_weight = 1000.0
 
 def decay(dictionary, dt):
     if 'Broadcast' in dictionary:

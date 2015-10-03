@@ -28,3 +28,7 @@ div, body {
 .oui {
     color: #8f8;
 }
+
+[visible="0"] {
+    display: none !important;
+}

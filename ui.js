@@ -40,6 +40,7 @@ function DrawLine(x1, y1, x2, y2, w, id, color){
     
     div.setAttribute('style','border-width:' + w + 'px;border-color:' + color + ';width:'+width+'px;height:0px;-moz-transform:rotate('+deg+'deg);-webkit-transform:rotate('+deg+'deg);position:absolute;top:'+y+'px;left:'+x+'px;');  
     div.setAttribute("live", "1");
+    return div;
 }
 
 toId = function(name) {
@@ -88,25 +89,33 @@ drawgraph = function(data) {
             var pos_a = div_a.position();
             var pos_b = div_b.position();
             if (!pos_a || !pos_b) return
-            DrawLine(pos_a.left + div_a.width() / 2,
+            var l = DrawLine(
+                     pos_a.left + div_a.width() / 2,
                      pos_a.top  + div_a.height() / 2,
                      pos_b.left + div_b.width() / 2,
                      pos_b.top  + div_b.height() / 2,
                      Math.max(basewidth * weight, 1),
                      lineId(name, name2),
                      weighttocolor(weight)
-                    )
+            )
+            $(l).attr({
+                srcid: id_a,
+                dstid: id_b
+            })
+            
         })
     })
     
     $('div').each(function(k, v) {
-        v = $(v)
+        var v = $(v)
         var live = v.attr("live")
         if (!live || live == "0") {
             v.detach()
         }
         v.attr("live", "0")
     })
+    
+    $(".node").mousedown(mousedown)
     
 }
 
@@ -117,10 +126,58 @@ update = function() {
     })
     .done(function( data ) {
         drawgraph(data)
+        filter()
         window.setTimeout(update, 100)
     })
 }
 
+
+filter = function() {
+    var kw = $("#filter").val()
+    var vis = {}
+    $(".node").each(function(k, v) {
+        var d = $(v)
+        if (d.text().match(kw)) {
+            d.attr("visible", "1")
+            vis[d.attr("id")] = 1
+        } else {
+            d.attr("visible", "0")
+        }
+    })
+    $(".line").each(function(k, v) {
+        var d = $(v)
+        if (vis.hasOwnProperty(d.attr("srcid"))
+         && vis.hasOwnProperty(d.attr("dstid"))) {
+            d.attr("visible", "1")
+        } else {
+            d.attr("visible", "0")
+        }
+    })
+}
+
+mousedown = function(evt) {
+    var d = $(evt.toElement)
+    var p = d.position()
+    var sx = evt.pageX
+    var sy = evt.pageY
+    d.mousemove(function(mvt) {
+        var dx = mvt.pageX - sx
+        var dy = mvt.pageY - sy
+        d.position(p.left + dx, p.top + dy)
+    })
+    d.mouseup(function(mvt) {
+        var dx = mvt.pageX - sx
+        var dy = mvt.pageY - sy
+        d.position(p.left + dx, p.top + dy)
+        d.attr({
+            offset_x: dx + parseFloat(d.attr("offset_x")),
+            offset_y: dy + parseFloat(d.attr("offset_y"))
+        })
+    })
+    
+}
+
 $(function() {
+    $("#filter").change(filter)
     update()
 })

@@ -32,7 +32,7 @@ def frontend(q):
             </head>
             
             <body id="main">
-            
+            <input type="text" id="filter" />
             </body>
         </html>
         '''
@@ -53,7 +53,7 @@ def frontend(q):
 def backend(q):
     
     lasttime = clock()
-
+ 
     dictionary = {}
     p = subprocess.Popen("sudo tcpdump --monitor-mode -i mon0 -e", 
                          shell=True, stdout=subprocess.PIPE)
