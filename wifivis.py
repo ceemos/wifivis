@@ -2,9 +2,10 @@ import subprocess
 from multiprocessing import Process, Queue
 from flask import Flask
 from parse_lib import parse
+from parse_lib import store
 import json
 
-testgraph = {
+'''testgraph = {
     "11:22:33:44:55" : {
         "weight" : 1.0,
         "x" : 0.5,
@@ -45,7 +46,7 @@ testgraph = {
         "edges" : {
         }
     }   
-}   
+}  ''' 
     
 
 def frontend(q):
@@ -87,9 +88,7 @@ def frontend(q):
     
 def backend(q):
     
-
-    def store(packet):
-        pass
+    dictionary = {}
     p = subprocess.Popen("cat dump", #"sudo tcpdump --monitor-mode -i mon0 -e", 
                          shell=True, stdout=subprocess.PIPE)
 
@@ -98,9 +97,10 @@ def backend(q):
         if not l:
             return
         packet = parse(str(l))
-        print(packet.ptype)
-        store(packet)
-        
+        store(packet,dictionary)
+        graph = {key:value.__dict__ for key,value in dictionary.items() if key != 'Broadcast'}
+        q.put(graph)
+
 if __name__ == '__main__':
     q = Queue(maxsize=1)
     back_p  = Process(target=backend, args=(q,))
