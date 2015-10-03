@@ -60,13 +60,32 @@ def add_edge(dictionary, source, target, oui_type_source, packet):
 	update_coordinates(dictionary[source], packet.power)
 	if dictionary[source].oui == '':
 		dictionary[source].oui = oui_type_source
+		
+
+floating_min = -90.0
+floating_max = 0.0
 	
 def update_coordinates(node_object, power):
+    
+	global floating_max
+	global floating_min
 	
-	function = math.log(abs(power))
-	division_const  = 10.0
-	node_object.x = node_object.sign * math.sqrt(function/(1 + node_object.tan ** 2)) 
-	node_object.y = node_object.tan * node_object.x
-	node_object.x = node_object.x/division_const + 0.5
-	node_object.y = node_object.y/division_const + 0.5
+	floating_max -= 0.02
+	floating_min += 0.02
+	floating_max = max(floating_max, power, floating_min + 1.0)
+	floating_min = min(floating_min, power, floating_max + 1.0)
+	
+	
+	radius = float(power-floating_max) / float(floating_min-floating_max)
+	
+	scale = 0.4
+	offset = 0.1
+
+	node_object.x = math.cos(node_object.theta) * (radius * scale + offset)
+	node_object.y = math.sin(node_object.theta) * (radius * scale + offset)
+	
+	node_object.x = node_object.x + 0.5
+	node_object.y = node_object.y + 0.5
+	
+	
 
