@@ -1,8 +1,8 @@
 import subprocess
 from multiprocessing import Process, Queue
 from flask import Flask
-from parse_lib import parse
-from parse_lib import store
+from function_lib import parse
+from function_lib import store
 import json
 from time import clock, sleep
 
