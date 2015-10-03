@@ -38,8 +38,8 @@ function DrawLine(x1, y1, x2, y2, w, id, color){
         document.getElementById("main").appendChild(div);
     }
     
-    div.setAttribute('style','border-width:' + w + 'px;border-color:' + color + ';width:'+width+'px;height:0px;-moz-transform:rotate('+deg+'deg);-webkit-transform:rotate('+deg+'deg);position:absolute;top:'+y+'px;left:'+x+'px;');   
-
+    div.setAttribute('style','border-width:' + w + 'px;border-color:' + color + ';width:'+width+'px;height:0px;-moz-transform:rotate('+deg+'deg);-webkit-transform:rotate('+deg+'deg);position:absolute;top:'+y+'px;left:'+x+'px;');  
+    div.attr("live", "1");
 }
 
 toId = function(name) {
@@ -72,6 +72,7 @@ drawgraph = function(data) {
             top: height * (paras['y']*0.8+0.1) - div.height() / 2 + "px" ,
             left: width * (paras['x']*0.8+0.1) - div.width() / 2  + "px",
         })
+        div.attr("live", "1")
     })
     
     $.each(data, function(name, paras) {
@@ -92,6 +93,14 @@ drawgraph = function(data) {
                      $.Color({hue: 0.5 + Math.log(weight), saturation: 0.9, lightness: 0.5}).toHexString()
                     )
         })
+    })
+    
+    $('div').each(function(k, v) {
+        var a = v.attr("live")
+        if (!live || live == "0") {
+            v.detach()
+        }
+        v.attr("live", "0")
     })
     
 }
