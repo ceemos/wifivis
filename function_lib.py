@@ -70,8 +70,8 @@ def update_coordinates(node_object, power):
 	global floating_max
 	global floating_min
 	
-	floating_max -= 0.02
-	floating_min += 0.02
+	floating_max -= 0.002
+	floating_min += 0.002
 	floating_max = max(floating_max, power, floating_min + 1.0)
 	floating_min = min(floating_min, power, floating_max + 1.0)
 	
