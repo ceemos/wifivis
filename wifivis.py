@@ -55,7 +55,7 @@ def backend(q):
     lasttime = clock()
 
     dictionary = {}
-    p = subprocess.Popen("sudo tcpdump --monitor-mode -i mon0 -e", 
+    p = subprocess.Popen("cat dump",#"sudo tcpdump --monitor-mode -i mon0 -e", 
                          shell=True, stdout=subprocess.PIPE)
 
     while True:
@@ -64,6 +64,8 @@ def backend(q):
             return
         packet = parse(str(l))
         store(packet, dictionary)
+        print(dictionary[packet.SA].x,dictionary[packet.SA].y)
+        print(dictionary[packet.DA].x,dictionary[packet.DA].y)
         currenttime = clock()
         if (currenttime - lasttime) > 0.003:
             dictionary = decay(dictionary, currenttime-lasttime)
@@ -72,13 +74,13 @@ def backend(q):
             q.put(graph)
 
 if __name__ == '__main__':
-   q = Queue(maxsize=1)
-   back_p  = Process(target=backend, args=(q,))
-   front_p = Process(target=frontend, args=(q,))
-   back_p.start()
-   front_p.start()
-   back_p.join()
-   front_p.join()
-   #backend(q)
+   q = Queue(maxsize=3)
+   #back_p  = Process(target=backend, args=(q,))
+   #front_p = Process(target=frontend, args=(q,))
+   #back_p.start()
+   #front_p.start()
+   #back_p.join()
+   #front_p.join()
+   backend(q)
 
     

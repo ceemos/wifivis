@@ -2,9 +2,8 @@ import re
 from class_def import parsed_line
 from class_def import MAC_node
 from oui import oui_lookup
-import pdb
 import math
-import random
+
 def parse(string):
 	x = parsed_line
 	bol = False
@@ -35,39 +34,36 @@ def parse(string):
 		x.oui_SA = oui_lookup(x.SA)
 	else:
 		x.ptype = '' #So that it will be skipped
-	x.power = int((re.search(pattern_power,string)).group(0))
-	px, py = pos_from_power(x.power)
-	x.x = px
-	x.y = py
+	x.power = int((re.search(pattern_power,string)).group(0))		
 	return x
 
 def store(packet,dictionary):
 	
 	if packet.ptype == '':
 		return
-	add_edge(dictionary, packet.SA, packet.DA,packet.oui_SA)
-	add_edge(dictionary, packet.DA, packet.SA,packet.oui_DA)
-	add_edge(dictionary, packet.SA, packet.name_sender, '')
-	add_edge(dictionary, packet.name_sender, packet.SA, '')
-	add_edge(dictionary, packet.DA, packet.name_sender,'')
-	add_edge(dictionary, packet.name_sender, packet.DA,'')
+	add_edge(dictionary, packet.SA, packet.DA,packet.oui_SA, packet)
+	add_edge(dictionary, packet.DA, packet.SA,packet.oui_DA, packet) 
+	add_edge(dictionary, packet.SA, packet.name_sender, '', packet)
+	add_edge(dictionary, packet.name_sender, packet.SA, '', packet)
+	add_edge(dictionary, packet.DA, packet.name_sender,'', packet)
+	add_edge(dictionary, packet.name_sender, packet.DA,'', packet)
 	
-def add_edge(dictionary, source, target, oui_type_source):
+def add_edge(dictionary, source, target, oui_type_source, packet):
 	if not source in dictionary:
 		dictionary[source] = MAC_node()
 	if not target in dictionary[source].edges:
 		dictionary[source].edges[target] = 0
+	#Routines to update state of the object
 	dictionary[source].edges[target] += 1
 	dictionary[source].weight += 1
+	update_coordinates(dictionary[source], packet.power)
 	if dictionary[source].oui == '':
 		dictionary[source].oui = oui_type_source
-		
-def pos_from_power(power):
-	theta = random.random() * 2 * math.pi
-	x = (random.randint(0, 2)*2 -1) * math.sqrt(abs(power) / (1+math.tan(theta) ** 2))
-	y = math.tan(theta) * x
-	return x/1.0, y/1.0
-    
-    
 	
+def update_coordinates(node_object, power):
+	
+	function = abs(power)
+	division_const  = 10
+	node_object.x =1/10* node_object.sign * math.sqrt(function/(1 + node_object.tan ** 2))
+	node_object.y = node_object.tan * node_object.x
 

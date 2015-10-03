@@ -11,8 +11,9 @@ class parsed_line:
 class MAC_node: #SA will be the name of the instance, DA the edge
 	def __init__(self):
 		self.weight = 0
-		self.x = random.random()
-		self.y = random.random() 
+		self.x = 0
+		self.y = 0 
 		self.oui= ''
 		self.edges = {}
-		
+		self.radius = 0.0  #Time changing radius
+		self.theta = random.random()* 2 * math.pi  #Static const
