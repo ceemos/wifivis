@@ -1,6 +1,7 @@
 import re
 from class_def import parsed_line
 from class_def import MAC_node
+from oui import oui_lookup
 import pdb
 def parse(string):
 	x = parsed_line
@@ -28,8 +29,8 @@ def parse(string):
 	x.DA = (re.search(pattern_DA,string)).group(1)
 	if temp:
 		x.name_sender = temp.group(3)
-		x.oui_DA= temp.group(1)
-		x.oui_SA= temp.group(2)
+		x.oui_DA = oui_lookup(x.DA)
+		x.oui_SA = oui_lookup(x.SA)
 	else:
 		x.ptype = '' #So that it will be skipped
 	x.power = int((re.search(pattern_power,string)).group(0))		

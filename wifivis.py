@@ -73,13 +73,13 @@ def backend(q):
             q.put(graph)
 
 if __name__ == '__main__':
-   q = Queue(maxsize=10)
+   q = Queue(maxsize=1)
    back_p  = Process(target=backend, args=(q,))
    front_p = Process(target=frontend, args=(q,))
    back_p.start()
    front_p.start()
    back_p.join()
    front_p.join()
-   backend(q)
+   #backend(q)
 
     

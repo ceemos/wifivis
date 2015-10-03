@@ -21,5 +21,10 @@ div, body {
     z-index: 0;
     border-color: #3f3;
     border-style: solid;
+    border-radius: 10px;
 /*     -webkit-filter: blur(15px); */
+}
+
+.oui {
+    color: #8f8;
 }
