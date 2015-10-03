@@ -5,6 +5,7 @@ from function_lib import parse
 from function_lib import store
 import json
 from time import clock, sleep
+from decay import decay
 
 '''testgraph = {
     "11:22:33:44:55" : {
@@ -65,6 +66,7 @@ def frontend(q):
                 <meta charset="UTF-8">
                 <title>wifivis</title>
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+                <script src="http://code.jquery.com/color/jquery.color-2.1.0.min.js"></script>
                 <style type="text/css">
         ''' +  css + '''       
                 </style>
@@ -89,26 +91,25 @@ def frontend(q):
     
 def backend(q):
     
-    lastpack = clock()
+    lasttime = clock()
 
     dictionary = {}
-    p = subprocess.Popen("cat dump", #"sudo tcpdump --monitor-mode -i mon0 -e", 
+    p = subprocess.Popen("sudo tcpdump --monitor-mode -i mon0 -e", 
                          shell=True, stdout=subprocess.PIPE)
 
     while True:
         l = p.stdout.readline()
-        sleep(0.1)
         if not l:
             return
         packet = parse(str(l))
         print(packet.ptype)
         store(packet, dictionary)
         currenttime = clock()
-        print(currenttime-lastpack)
-        if (currenttime - lastpack) > 0.001:
+        print(currenttime-lasttime)
+        if (currenttime - lasttime) > 0.003:
+            dictionary = decay(dictionary, currenttime-lasttime)
             print("sending update")
-            lastpack = currenttime
-            store(packet,dictionary)
+            lasttime = currenttime
             graph = {key:value.__dict__ for key,value in dictionary.items()}
             q.put(graph)
 

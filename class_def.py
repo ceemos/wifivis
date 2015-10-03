@@ -8,7 +8,7 @@ class parsed_line:
 
 class MAC_node: #SA will be the name of the instance, DA the edge
 	def __init__(self):
-		self.weights = 0
+		self.weight = 0
 		self.x = random.random()
 		self.y = random.random() 
 		self.edges = {}

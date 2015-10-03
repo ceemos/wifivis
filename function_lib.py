@@ -47,5 +47,5 @@ def add_edge(dictionary, source, target):
 	if not target in dictionary[source].edges:
 		dictionary[source].edges[target] = 0
 	dictionary[source].edges[target] += 1
-	dictionary[source].weights += 1
+	dictionary[source].weight += 1
 
