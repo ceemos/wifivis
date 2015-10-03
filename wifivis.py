@@ -55,7 +55,7 @@ def backend(q):
     lasttime = clock()
  
     dictionary = {}
-    p = subprocess.Popen("sudo tcpdump --monitor-mode -i mon0 -e", 
+    p = subprocess.Popen("cat dump",#"sudo tcpdump --monitor-mode -i mon0 -e", 
                          shell=True, stdout=subprocess.PIPE)
 
     while True:
@@ -70,6 +70,7 @@ def backend(q):
             lasttime = currenttime
             graph = {key:value.__dict__ for key,value in dictionary.items()}
             q.put(graph)
+        sleep(0.1)
 
 if __name__ == '__main__':
    q = Queue(maxsize=1)
