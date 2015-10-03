@@ -5,7 +5,7 @@ lines = []
 with open("/usr/share/wireshark/manuf") as f:
     lines = f.readlines()
     
-e = [re.split("\s+", s, 3) for s in lines]
+e = [re.split("\s+", s[0:-1], 3) for s in lines]
 
 table = {str(p[0]) : str(p[-1]) for p in e if len(p[0]) == 8}
 

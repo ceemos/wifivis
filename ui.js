@@ -51,7 +51,11 @@ lineId = function(name1, name2) {
 }
 
 weighttocolor = function(weight) {
-    
+    var fact = 10
+    var blue = 50
+    var red   = Math.max(0, Math.min(255, 255 - Math.log(weight) * fact))
+    var green = Math.max(0, Math.min(255, 0   + Math.log(weight) * fact))
+    return '#' + Math.floor(red).toString(16) + Math.floor(green).toString(16) + Math.floor(blue).toString(16)
 }
 
 drawgraph = function(data) {
@@ -90,7 +94,7 @@ drawgraph = function(data) {
                      pos_b.top  + div_b.height() / 2,
                      Math.max(basewidth * weight, 1),
                      lineId(name, name2),
-                     $.Color({ hue: 0.3, saturation: 0.8, lightness: 0.5, alpha: 1 }).toHexString()
+                     weighttocolor(weight)
                     )
         })
     })

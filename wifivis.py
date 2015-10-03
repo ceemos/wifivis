@@ -22,8 +22,7 @@ def frontend(q):
             <head>
                 <meta charset="UTF-8">
                 <title>wifivis</title>
-                <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-                <script src="http://code.jquery.com/color/jquery.color-2.1.0.min.js"></script>
+                <script src="/jquery.min.js"></script>
                 <style type="text/css">
         ''' +  css + '''       
                 </style>
@@ -42,6 +41,11 @@ def frontend(q):
     def ajax():
         update = q.get()
         return json.dumps(update)
+    
+    @app.route('/jquery.min.js')
+    def jquery():
+        with open("jquery.min.js") as f:
+            return f.read() 
 
     app.run()
     
@@ -59,15 +63,10 @@ def backend(q):
         if not l:
             return
         packet = parse(str(l))
-        print(packet.oui_SA)
-        print(packet.oui_DA)
-        print(packet.name_sender)
         store(packet, dictionary)
         currenttime = clock()
-        print(currenttime-lasttime)
         if (currenttime - lasttime) > 0.003:
             dictionary = decay(dictionary, currenttime-lasttime)
-            print("sending update")
             lasttime = currenttime
             graph = {key:value.__dict__ for key,value in dictionary.items()}
             q.put(graph)

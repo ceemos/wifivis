@@ -3,6 +3,8 @@ from class_def import parsed_line
 from class_def import MAC_node
 from oui import oui_lookup
 import pdb
+import math
+import random
 def parse(string):
 	x = parsed_line
 	bol = False
@@ -33,7 +35,10 @@ def parse(string):
 		x.oui_SA = oui_lookup(x.SA)
 	else:
 		x.ptype = '' #So that it will be skipped
-	x.power = int((re.search(pattern_power,string)).group(0))		
+	x.power = int((re.search(pattern_power,string)).group(0))
+	px, py = pos_from_power(x.power)
+	x.x = px
+	x.y = py
 	return x
 
 def store(packet,dictionary):
@@ -56,5 +61,13 @@ def add_edge(dictionary, source, target, oui_type_source):
 	dictionary[source].weight += 1
 	if dictionary[source].oui == '':
 		dictionary[source].oui = oui_type_source
+		
+def pos_from_power(power):
+	theta = random.random() * 2 * math.pi
+	x = (random.randint(0, 2)*2 -1) * math.sqrt(abs(power) / (1+math.tan(theta) ** 2))
+	y = math.tan(theta) * x
+	return x/1.0, y/1.0
+    
+    
 	
 
