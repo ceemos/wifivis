@@ -1,6 +1,6 @@
 import re
-from packet_class import parsed_line
-from packet_class import MAC_node
+from class_def import parsed_line
+from class_def import MAC_node
 
 def parse(string):
 	x = parsed_line
