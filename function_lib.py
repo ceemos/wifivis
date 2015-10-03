@@ -63,8 +63,10 @@ def add_edge(dictionary, source, target, oui_type_source, packet):
 	
 def update_coordinates(node_object, power):
 	
-	function = abs(power)
-	division_const  = 10
-	node_object.x =1/10* node_object.sign * math.sqrt(function/(1 + node_object.tan ** 2))
+	function = math.log(abs(power))
+	division_const  = 10.0
+	node_object.x = node_object.sign * math.sqrt(function/(1 + node_object.tan ** 2)) 
 	node_object.y = node_object.tan * node_object.x
+	node_object.x = node_object.x/division_const + 0.5
+	node_object.y = node_object.y/division_const + 0.5
 
