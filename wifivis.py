@@ -8,8 +8,28 @@ def frontend(q):
     app = Flask(__name__)
     
     @app.route('/')
-    def hello_world():
-        return 'Hello World!'
+    def index():
+        with open("ui.js") as f: js = f.read()
+        with open("ui.css") as f: css = f.read()
+        
+        return '''
+        <html>
+            <head>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+                <style "type=text/css">
+        ''' +  css + '''       
+                </style>
+                <script type="text/javascript">
+        ''' + js + '''
+                </script>
+            </head>
+            
+            <body>
+            
+            </body>
+        </html>
+        '''
+    
     
     app.run()
     
@@ -23,7 +43,7 @@ def backend(q):
     def store(packet):
         pass
 # 
-    p = subprocess.Popen("sudo tcpdump --monitor-mode -i mon0 -e", 
+    p = subprocess.Popen("cat dump", #"sudo tcpdump --monitor-mode -i mon0 -e", 
                          shell=True, stdout=subprocess.PIPE)
 
     while True:
@@ -40,5 +60,6 @@ if __name__ == '__main__':
     back_p.start()
     front_p.start()
     back_p.join()
+    front_p.join()
 
     
