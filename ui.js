@@ -53,7 +53,7 @@ lineId = function(name1, name2) {
 drawgraph = function(data) {
     var height = window.innerHeight
     var width = window.innerWidth
-    var basesize = 50;
+    var basesize = 100;
     var basewidth = 1;
     $.each(data, function(name, paras) {
         var id = toId(name)
@@ -65,8 +65,8 @@ drawgraph = function(data) {
         div.css("font-size", basesize * paras['weight'] + "px")
         div.css({
             position: "absolute",
-            top: height * paras['y'] - div.height() / 2 + "px",
-            left: width * paras['x'] - div.width()  / 2 + "px",
+            top: height * (paras['y'] + 0.02 * (Math.random() - 0.5)) - div.height() / 2 + "px" ,
+            left: width * (paras['x'] + 0.02 * (Math.random() - 0.5)) - div.width() / 2  + "px",
         })
     })
     

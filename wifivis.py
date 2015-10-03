@@ -3,6 +3,7 @@ from multiprocessing import Process, Queue
 from flask import Flask
 from parse_lib import parse
 import json
+from time import clock, sleep
 
 testgraph = {
     "11:22:33:44:55" : {
@@ -87,6 +88,7 @@ def frontend(q):
     
 def backend(q):
     
+    lastpack = clock()
 
     def store(packet):
         pass
@@ -95,11 +97,19 @@ def backend(q):
 
     while True:
         l = p.stdout.readline()
+        sleep(0.1)
         if not l:
             return
         packet = parse(str(l))
         print(packet.ptype)
         store(packet)
+        currenttime = clock()
+        print(currenttime-lastpack)
+        if (currenttime - lastpack) > 0.001:
+            print("sending update")
+            q.put({})
+            lastpack = currenttime
+            
         
 if __name__ == '__main__':
     q = Queue(maxsize=1)
