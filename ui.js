@@ -59,7 +59,7 @@ drawgraph = function(data) {
         var id = toId(name)
         var div = $(document.getElementById(id)) 
         if (div.length == 0) {
-            div = $('<div class="node" id="'+ id + '">' + name + '</div>')
+            div = $('<div class="node" id="'+ id + '">' + name + '<br><span class="oui">' + (paras.hasOwnProperty('oui') ? paras['oui'] : "") + '</span></div>')
             $("#main").append(div)
         }
         div.css("font-size", basesize * paras['weight'] + "px")
