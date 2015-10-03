@@ -1,12 +1,17 @@
 div, body {
     position: absolute;
+    background-color: #000;
+    color: #8f8;
 }
 
 .node {
     z-index: 1;
-    background-color: #fff;
+    background-color: rgba(0,0,0, 0.5);
+    padding: 5px;
 }
 
 .line {
     z-index: 0;
+    border-color: #8f8;
+    border-style: solid;
 }

@@ -35,10 +35,10 @@ function DrawLine(x1, y1, x2, y2, w, id){
         div = document.createElementNS(htmlns, "div");
         div.setAttribute("class", "line");
         div.setAttribute("id", id);
-        document.getElementsByTagName("body")[0].appendChild(div);
+        document.getElementById("main").appendChild(div);
     }
     
-    div.setAttribute('style','border:' + w + 'px solid black;width:'+width+'px;height:0px;-moz-transform:rotate('+deg+'deg);-webkit-transform:rotate('+deg+'deg);position:absolute;top:'+y+'px;left:'+x+'px;');   
+    div.setAttribute('style','border-width:' + w + 'px;width:'+width+'px;height:0px;-moz-transform:rotate('+deg+'deg);-webkit-transform:rotate('+deg+'deg);position:absolute;top:'+y+'px;left:'+x+'px;');   
 
 }
 
@@ -59,8 +59,8 @@ drawgraph = function(data) {
         var id = toId(name)
         var div = $(document.getElementById(id)) 
         if (div.length == 0) {
-            document.write('<div class="node" id="'+ id + '">' + name + '</div>')
-            div = $(document.getElementById(id)) 
+            div = $('<div class="node" id="'+ id + '">' + name + '</div>')
+            $("#main").append(div)
         }
         div.css("font-size", basesize * paras['weight'] + "px")
         div.css({
@@ -101,4 +101,6 @@ update = function() {
     })
 }
 
-update()
+$(function() {
+    update()
+})

@@ -71,7 +71,7 @@ def frontend(q):
                 </script>
             </head>
             
-            <body>
+            <body id="main">
             
             </body>
         </html>
