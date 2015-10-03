@@ -26,6 +26,7 @@ def parse(string):
 	x.SA = (re.search(pattern_SA,string)).group(1)
 	x.DA = (re.search(pattern_DA,string)).group(1)
 	x.name = (re.search(pattern_name,string)).group(2)
+	x.oui= (re.search(pattern_name,string)).group(1)
 	x.power = int((re.search(pattern_power,string)).group(0))		
 	return x
 
