@@ -4,14 +4,21 @@ div, body {
     color: #8f8;
 }
 
+.line, .node {
+    -webkit-transition: all 600ms cubic-bezier(0.39, 0.575, 0.565, 1);
+    transition:         all 600ms cubic-bezier(0.39, 0.575, 0.565, 1);
+}
+
 .node {
     z-index: 1;
     background-color: rgba(0,0,0, 0.5);
     padding: 5px;
+    box-shadow: 0px 0px 50px #000;
 }
 
 .line {
     z-index: 0;
     border-color: #8f8;
     border-style: solid;
+    -webkit-filter: blur(15px);
 }

@@ -4,6 +4,7 @@ from flask import Flask
 from function_lib import parse
 from function_lib import store
 import json
+from time import clock, sleep
 
 '''testgraph = {
     "11:22:33:44:55" : {
@@ -81,25 +82,35 @@ def frontend(q):
     @app.route('/dynamic')
     def ajax():
         update = q.get()
-        return json.dumps(testgraph)
+        return json.dumps(update)
 
     app.run()
     
     
 def backend(q):
     
+    lastpack = clock()
+
     dictionary = {}
     p = subprocess.Popen("cat dump", #"sudo tcpdump --monitor-mode -i mon0 -e", 
                          shell=True, stdout=subprocess.PIPE)
 
     while True:
         l = p.stdout.readline()
+        sleep(0.1)
         if not l:
             return
         packet = parse(str(l))
-        store(packet,dictionary)
-        graph = {key:value.__dict__ for key,value in dictionary.items() if key != 'Broadcast'}
-        q.put(graph)
+        print(packet.ptype)
+        store(packet, dictionary)
+        currenttime = clock()
+        print(currenttime-lastpack)
+        if (currenttime - lastpack) > 0.001:
+            print("sending update")
+            lastpack = currenttime
+            store(packet,dictionary)
+            graph = {key:value.__dict__ for key,value in dictionary.items()}
+            q.put(graph)
 
 if __name__ == '__main__':
     q = Queue(maxsize=1)
@@ -109,5 +120,6 @@ if __name__ == '__main__':
     front_p.start()
     back_p.join()
     front_p.join()
+    #backend(q)
 
     
