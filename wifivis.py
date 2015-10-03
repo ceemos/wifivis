@@ -6,6 +6,7 @@ from function_lib import store
 import json
 from time import clock, sleep
 from decay import decay
+from ordering import order_step
 
 
 def frontend(q):
@@ -67,6 +68,7 @@ def backend(q):
         currenttime = clock()
         if (currenttime - lasttime) > 0.003:
             dictionary = decay(dictionary, currenttime-lasttime)
+            #order_step(dictionary, currenttime-lasttime)
             lasttime = currenttime
             graph = {key:value.__dict__ for key,value in dictionary.items()}
             q.put(graph)

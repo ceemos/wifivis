@@ -28,6 +28,9 @@ function DrawLine(x1, y1, x2, y2, w, id, color){
     var cosb = (b*b - a*a - c*c) / (2*a*c);
     var rad = Math.acos(cosb);
     var deg = (rad*180)/Math.PI
+    
+    while (deg > 91) deg -= 180;
+    while (deg < -91) deg += 180;
 
     var div = document.getElementById(id);
     if (!div) {
@@ -115,8 +118,6 @@ drawgraph = function(data) {
         v.attr("live", "0")
     })
     
-    $(".node").mousedown(mousedown)
-    
 }
 
 update = function() {
@@ -146,36 +147,18 @@ filter = function() {
     })
     $(".line").each(function(k, v) {
         var d = $(v)
-        if (vis.hasOwnProperty(d.attr("srcid"))
-         && vis.hasOwnProperty(d.attr("dstid"))) {
+        if (vis.hasOwnProperty(d.attr("srcid"))) {
             d.attr("visible", "1")
+            $('#' + d.attr("dstid")).attr("visible", "1")
+        } else if(vis.hasOwnProperty(d.attr("dstid"))) {
+            d.attr("visible", "1")
+            $('#' + d.attr("srcid")).attr("visible", "1")
         } else {
             d.attr("visible", "0")
         }
     })
 }
 
-mousedown = function(evt) {
-    var d = $(evt.toElement)
-    var p = d.position()
-    var sx = evt.pageX
-    var sy = evt.pageY
-    d.mousemove(function(mvt) {
-        var dx = mvt.pageX - sx
-        var dy = mvt.pageY - sy
-        d.position(p.left + dx, p.top + dy)
-    })
-    d.mouseup(function(mvt) {
-        var dx = mvt.pageX - sx
-        var dy = mvt.pageY - sy
-        d.position(p.left + dx, p.top + dy)
-        d.attr({
-            offset_x: dx + parseFloat(d.attr("offset_x")),
-            offset_y: dy + parseFloat(d.attr("offset_y"))
-        })
-    })
-    
-}
 
 $(function() {
     $("#filter").change(filter)
