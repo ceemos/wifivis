@@ -2,7 +2,7 @@ from __future__ import print_function
 import subprocess
 from multiprocessing import Process, Queue
 from flask import Flask
-
+from parse_lib import parse
 
 def frontend(q):
     app = Flask(__name__)
@@ -16,21 +16,20 @@ def frontend(q):
     
 def backend(q):
 
-    def parse(line):
-        print(line)
 
 
     def store(packet):
         pass
 # 
-    p = subprocess.Popen("sudo tcpdump --monitor-mode -i mon0 -e", 
+    p = subprocess.Popen("cat dump ", 
                          shell=True, stdout=subprocess.PIPE)
 
     while True:
         l = p.stdout.readline()
         if not l:
             return
-        packet = parse(l)
+        packet = parse(str(l))
+        print(packet.ptype)
         store(packet)
         
 if __name__ == '__main__':
