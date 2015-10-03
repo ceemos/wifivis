@@ -2,10 +2,11 @@ import subprocess
 from multiprocessing import Process, Queue
 from flask import Flask
 from parse_lib import parse
+from parse_lib import store
 import json
 from time import clock, sleep
 
-testgraph = {
+'''testgraph = {
     "11:22:33:44:55" : {
         "weight" : 1.0,
         "x" : 0.5,
@@ -46,7 +47,7 @@ testgraph = {
         "edges" : {
         }
     }   
-}   
+}  ''' 
     
 
 def frontend(q):
@@ -81,7 +82,7 @@ def frontend(q):
     @app.route('/dynamic')
     def ajax():
         update = q.get()
-        return json.dumps(testgraph)
+        return json.dumps(update)
 
     app.run()
     
@@ -90,8 +91,7 @@ def backend(q):
     
     lastpack = clock()
 
-    def store(packet):
-        pass
+    dictionary = {}
     p = subprocess.Popen("cat dump", #"sudo tcpdump --monitor-mode -i mon0 -e", 
                          shell=True, stdout=subprocess.PIPE)
 
@@ -102,15 +102,16 @@ def backend(q):
             return
         packet = parse(str(l))
         print(packet.ptype)
-        store(packet)
+        store(packet, dictionary)
         currenttime = clock()
         print(currenttime-lastpack)
         if (currenttime - lastpack) > 0.001:
             print("sending update")
-            q.put({})
             lastpack = currenttime
-            
-        
+            store(packet,dictionary)
+            graph = {key:value.__dict__ for key,value in dictionary.items()}
+            q.put(graph)
+
 if __name__ == '__main__':
     q = Queue(maxsize=1)
     back_p  = Process(target=backend, args=(q,))
@@ -119,5 +120,6 @@ if __name__ == '__main__':
     front_p.start()
     back_p.join()
     front_p.join()
+    #backend(q)
 
     

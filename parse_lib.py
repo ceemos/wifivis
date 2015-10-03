@@ -1,6 +1,8 @@
+import re
+from packet_class import parsed_line
+from packet_class import MAC_node
+
 def parse(string):
-	from packet_class import parsed_line
-	import re
 	x = parsed_line
 	bol = False
 	P = []
@@ -26,3 +28,23 @@ def parse(string):
 	x.name = (re.search(pattern_name,string)).group(2)
 	x.power = int((re.search(pattern_power,string)).group(0))		
 	return x
+
+def store(packet,dictionary):
+	
+	if packet.ptype == '':
+		return
+	add_edge(dictionary, packet.SA, packet.DA)
+	add_edge(dictionary, packet.DA, packet.SA)
+	add_edge(dictionary, packet.SA, packet.name)
+	add_edge(dictionary, packet.name, packet.SA)
+	add_edge(dictionary, packet.DA, packet.name)
+	add_edge(dictionary, packet.name, packet.DA)
+	
+def add_edge(dictionary, source, target):
+	if not source in dictionary:
+		dictionary[source] = MAC_node()
+	if not target in dictionary[source].edges:
+		dictionary[source].edges[target] = 0
+	dictionary[source].edges[target] += 1
+	dictionary[source].weights += 1
+
