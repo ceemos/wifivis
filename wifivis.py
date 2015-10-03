@@ -1,7 +1,7 @@
-from __future__ import print_function
 import subprocess
 from multiprocessing import Process, Queue
 from flask import Flask
+import json
 
 
 def frontend(q):
@@ -29,14 +29,21 @@ def frontend(q):
             </body>
         </html>
         '''
-    
-    
+        
+    @app.route('/dynamic')
+    def ajax():
+        update = q.get()
+        print(json.dumps(update))
+        return json.dumps(update)
+
     app.run()
     
     
 def backend(q):
+    
 
     def parse(line):
+        q.put({"data": str(line)}, True)
         print(line)
 
 
@@ -54,7 +61,7 @@ def backend(q):
         store(packet)
         
 if __name__ == '__main__':
-    q = Queue()
+    q = Queue(maxsize=1)
     back_p  = Process(target=backend, args=(q,))
     front_p = Process(target=frontend, args=(q,))
     back_p.start()
