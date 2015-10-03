@@ -39,7 +39,7 @@ function DrawLine(x1, y1, x2, y2, w, id, color){
     }
     
     div.setAttribute('style','border-width:' + w + 'px;border-color:' + color + ';width:'+width+'px;height:0px;-moz-transform:rotate('+deg+'deg);-webkit-transform:rotate('+deg+'deg);position:absolute;top:'+y+'px;left:'+x+'px;');  
-    div.attr("live", "1");
+    div.setAttribute("live", "1");
 }
 
 toId = function(name) {
@@ -57,8 +57,8 @@ weighttocolor = function(weight) {
 drawgraph = function(data) {
     var height = window.innerHeight
     var width = window.innerWidth
-    var basesize = 1;
-    var basewidth = 0.5;
+    var basesize = 0.1;
+    var basewidth = 0.07;
     $.each(data, function(name, paras) {
         var id = toId(name)
         var div = $(document.getElementById(id)) 
@@ -90,13 +90,14 @@ drawgraph = function(data) {
                      pos_b.top  + div_b.height() / 2,
                      Math.max(basewidth * weight, 1),
                      lineId(name, name2),
-                     $.Color({hue: 0.5 + Math.log(weight), saturation: 0.9, lightness: 0.5}).toHexString()
+                     $.Color({ hue: 0.3, saturation: 0.8, lightness: 0.5, alpha: 1 }).toHexString()
                     )
         })
     })
     
     $('div').each(function(k, v) {
-        var a = v.attr("live")
+        v = $(v)
+        var live = v.attr("live")
         if (!live || live == "0") {
             v.detach()
         }
