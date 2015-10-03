@@ -1,0 +1,12 @@
+div, body {
+    position: absolute;
+}
+
+.node {
+    z-index: 1;
+    background-color: #fff;
+}
+
+.line {
+    z-index: 0;
+}
