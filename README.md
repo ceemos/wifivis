@@ -3,6 +3,8 @@ WifiVis
 
 You can't see them. You can't hear them. Yet they are talking all around you: Wifi devices.
 
+![Noisy air at HackZurich.](doc/hackzurich-all.png?raw=true "Noisy air at HackZurich.")
+
 WifiVis will visualize as much of the Wifi communication around you. At the moment this is mostly metadata: who is talking to whom? Who is asking for whom? who is talking most or loudest? 
 
 # Dependencies

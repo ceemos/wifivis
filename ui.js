@@ -47,7 +47,7 @@ function DrawLine(x1, y1, x2, y2, w, id, color){
 }
 
 toId = function(name) {
-    return "node" + name.replace(/:/g, "_")
+    return "node" + name.replace(/:/g, "_").replace(/[^a-z0-9_]/g, "")
 }
 
 lineId = function(name1, name2) {

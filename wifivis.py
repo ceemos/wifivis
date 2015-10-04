@@ -66,16 +66,16 @@ def backend(q):
         packet = parse(str(l))
         store(packet, dictionary)
         currenttime = clock()
-        if (currenttime - lasttime) > 0.003:
-            dictionary = decay(dictionary, currenttime-lasttime)
+        if q.empty():
             #order_step(dictionary, currenttime-lasttime)
+            dictionary = decay(dictionary, currenttime-lasttime)
             lasttime = currenttime
             graph = {key:value.__dict__ for key,value in dictionary.items()}
             q.put(graph)
         #sleep(0.1)
 
 if __name__ == '__main__':
-   q = Queue(maxsize=1)
+   q = Queue(maxsize=3)
    back_p  = Process(target=backend, args=(q,))
    front_p = Process(target=frontend, args=(q,))
    back_p.start()
