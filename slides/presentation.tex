@@ -1,4 +1,4 @@
-\documentclass[compress]{beamer}
+\documentclass[aspectratio=169]{beamer}
 
 \usepackage[latin1]{inputenc}
 \usepackage{amsmath}
@@ -6,11 +6,11 @@
 \usepackage{mathrsfs}
 \usepackage{color,graphicx}
 \usepackage{tikz}
-
+\fontsize{50pt}{7.2}\selectfont
 %Title
 \author{Antonio Loquercio and Marcel Schneider}
-\title{WiFivis: See who is around you}
-\date{Today}
+\title{WiFiVis: See who is around you}
+\date{\today}
 
 
 % TOC parameters.
@@ -22,15 +22,26 @@
 
 \begin{document}
 \frame[plain]{\titlepage}
-
+%
 \begin{frame}
 \begin{center}
-You can't see them, you can't hear them, but they are all around you:\\
-\\textbf{Wifi devices}
-\begin{picture}
-
+\large You can't see them, you can't hear them, but they are all around you:\\
+\textbf{Wifi devices}
 \end{center}
+\vspace{-5mm}
+\begin{figure}
+    \centering
+    \def\svgwidth{\columnwidth}
+    \input{overview.pdf_tex}
+
+\end{figure}
+\end{frame}
+\begin{frame}
+   \centering
+	\huge
+    \def\svgwidth{\columnwidth}
+\input{drawing.pdf_tex}
 
 \end{frame}
-
+%
 \end{document}
